@@ -531,19 +531,102 @@ h1,h2,h3,h4,h5{font-family:'Bricolage Grotesque',sans-serif;}
 .sdc-chev.open{transform:rotate(180deg);}
 .sdc-body{display:none;padding:10px 18px 15px;}
 .sdc-body.open{display:block;animation:fadeUp .22s ease both;}
-.dgrid{display:grid;grid-template-columns:repeat(auto-fill,minmax(225px,1fr));gap:8px;}
-.deal-card{display:flex;align-items:center;gap:10px;background:var(--g1);border-radius:12px;padding:10px;border:1.5px solid transparent;cursor:pointer;transition:all .18s;}
-.deal-card:hover{background:var(--orange-pale);border-color:rgba(255,107,0,.22);}
-.deal-card.feat{background:var(--orange-pale);border-color:rgba(255,107,0,.28);grid-column:span 2;}
-.dc-em{width:36px;height:36px;background:var(--white);border-radius:9px;display:flex;align-items:center;justify-content:center;font-size:19px;box-shadow:0 1px 6px rgba(0,0,0,.06);flex-shrink:0;}
-.dc-inf{flex:1;min-width:0;}
-.dc-nm{font-size:12.5px;font-weight:700;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
-.dc-un{font-size:10.5px;color:var(--g3);}
-.dc-atc{font-size:10px;font-weight:700;color:var(--orange);margin-top:3px;}
-.dc-pr{text-align:right;flex-shrink:0;}
+/* ── Deliveroo-style deal cards ── */
+.dgrid{display:grid;grid-template-columns:repeat(auto-fill,minmax(160px,1fr));gap:12px;}
+.deal-card{
+  position:relative;background:var(--white);border-radius:16px;
+  border:1.5px solid var(--g2);overflow:hidden;
+  cursor:pointer;transition:transform .22s,box-shadow .22s;
+  display:flex;flex-direction:column;
+}
+.deal-card:hover{transform:translateY(-3px);box-shadow:0 12px 32px rgba(0,0,0,.11);border-color:rgba(255,107,0,.28);}
+.deal-card.feat{border-color:var(--orange);box-shadow:0 4px 18px rgba(255,107,0,.14);}
+.deal-card.promo{border-color:var(--blue);}
+
+/* image / emoji area */
+.dc-img{
+  width:100%;height:110px;background:var(--g1);
+  display:flex;align-items:center;justify-content:center;
+  font-size:46px;position:relative;overflow:hidden;
+  transition:background .2s;
+}
+.deal-card:hover .dc-img{background:var(--orange-pale);}
+.deal-card.promo .dc-img{background:var(--blue-l);}
+
+/* discount badge top-left */
+.dc-badge{
+  position:absolute;top:8px;left:8px;
+  background:var(--red);color:var(--white);
+  border-radius:6px;padding:2px 7px;font-size:9.5px;font-weight:800;
+  z-index:2;letter-spacing:.2px;
+}
+.dc-badge.promo-tag{background:var(--blue);}
+.dc-badge.hot-tag{background:linear-gradient(135deg,#FF6B00,#FF1744);}
+
+/* "PROMO" or "NEW" label */
+.dc-label{
+  position:absolute;top:8px;right:8px;
+  font-size:8.5px;font-weight:800;letter-spacing:.6px;text-transform:uppercase;
+  padding:2px 7px;border-radius:5px;z-index:2;
+}
+.dc-label.new{background:#DCFCE7;color:#15803d;}
+.dc-label.hot{background:#FFF3E6;color:var(--orange);}
+.dc-label.promo{background:var(--blue-l);color:var(--blue);}
+
+/* floating + button (Deliveroo style) */
+.dc-plus{
+  position:absolute;bottom:-2px;right:-2px;
+  width:36px;height:36px;border-radius:999px;
+  background:var(--white);border:none;
+  box-shadow:0 3px 12px rgba(0,0,0,.18);
+  display:flex;align-items:center;justify-content:center;
+  font-size:20px;font-weight:300;color:var(--g4);
+  cursor:pointer;transition:all .2s;z-index:3;
+  font-family:'Outfit',sans-serif;line-height:1;
+}
+.dc-plus:hover,.deal-card:hover .dc-plus{
+  background:var(--orange);color:var(--white);
+  transform:scale(1.1) rotate(90deg);
+  box-shadow:0 4px 16px rgba(255,107,0,.35);
+}
+.dc-plus.added{background:var(--green);color:var(--white);transform:scale(1);}
+
+/* info section */
+.dc-inf{padding:9px 10px 10px;flex:1;display:flex;flex-direction:column;gap:2px;}
+.dc-nm{font-size:12.5px;font-weight:700;line-height:1.35;overflow:hidden;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;}
+.dc-un{font-size:10.5px;color:var(--g3);margin-top:1px;}
+.dc-prices{display:flex;align-items:center;gap:5px;margin-top:5px;}
 .dc-new{font-family:'Bricolage Grotesque',sans-serif;font-size:15px;font-weight:800;color:var(--orange);}
 .dc-old{font-size:10.5px;color:var(--g3);text-decoration:line-through;}
-.dc-disc{display:inline-block;background:var(--red);color:var(--white);border-radius:5px;padding:2px 5px;font-size:9px;font-weight:700;}
+.dc-disc{display:none;} /* now shown as .dc-badge overlay */
+
+/* "Not found" related suggestions */
+.related-sec{padding:22px 22px 10px;border-top:1.5px dashed var(--g2);}
+.related-lbl{font-size:9.5px;font-weight:700;color:var(--g3);text-transform:uppercase;letter-spacing:.7px;margin-bottom:12px;display:flex;align-items:center;gap:7px;}
+.related-lbl::before{content:'🔍';font-size:12px;}
+.related-strip{display:flex;gap:10px;overflow-x:auto;padding-bottom:6px;scrollbar-width:none;}
+.related-strip::-webkit-scrollbar{display:none;}
+.rel-card{flex:0 0 130px;background:var(--white);border:1.5px solid var(--g2);border-radius:13px;overflow:hidden;cursor:pointer;transition:all .2s;}
+.rel-card:hover{border-color:var(--orange);transform:translateY(-2px);box-shadow:0 6px 18px rgba(0,0,0,.08);}
+.rel-card-img{height:80px;background:var(--g1);display:flex;align-items:center;justify-content:center;font-size:34px;position:relative;}
+.rel-card-plus{position:absolute;bottom:-2px;right:-2px;width:28px;height:28px;border-radius:50%;background:var(--white);box-shadow:0 2px 8px rgba(0,0,0,.14);display:flex;align-items:center;justify-content:center;font-size:16px;color:var(--g4);transition:all .2s;border:none;cursor:pointer;}
+.rel-card:hover .rel-card-plus{background:var(--orange);color:var(--white);}
+.rel-card-inf{padding:7px 8px 9px;}
+.rel-card-nm{font-size:11.5px;font-weight:700;line-height:1.3;margin-bottom:2px;}
+.rel-card-pr{font-family:'Bricolage Grotesque',sans-serif;font-size:13px;font-weight:800;color:var(--orange);}
+.not-found-note{display:flex;align-items:center;gap:9px;background:var(--orange-pale);border:1.5px solid rgba(255,107,0,.2);border-radius:11px;padding:10px 13px;font-size:12.5px;color:var(--g4);margin-bottom:14px;}
+.not-found-note strong{color:var(--orange);}
+
+/* Store promo banner */
+.store-promo-banner{
+  background:linear-gradient(135deg,var(--orange),#FF9A3C);
+  border-radius:12px;padding:12px 16px;margin-bottom:12px;
+  display:flex;align-items:center;justify-content:space-between;
+  color:var(--white);
+}
+.spb-txt{font-size:13px;font-weight:800;letter-spacing:-.2px;}
+.spb-sub{font-size:10.5px;opacity:.8;margin-top:2px;}
+.spb-badge{background:rgba(255,255,255,.22);border-radius:8px;padding:5px 10px;font-size:12px;font-weight:800;white-space:nowrap;}
 .deals-ft{display:flex;align-items:center;justify-content:space-between;padding:12px 40px;max-width:1100px;margin:8px auto 0;flex-wrap:wrap;gap:8px;}
 .upd-note{font-size:11.5px;color:var(--g3);}
 .view-all{display:flex;align-items:center;gap:4px;padding:6px 14px;border-radius:8px;border:1.5px solid var(--g2);background:transparent;font-size:12px;font-weight:600;color:var(--black);cursor:pointer;font-family:'Outfit',sans-serif;transition:all .2s;}
@@ -607,8 +690,8 @@ footer{background:var(--black);padding:44px 40px 28px;}
   .steps,.imp-grid{grid-template-columns:repeat(2,1fr);}
   .sum-cards{grid-template-columns:1fr;}
   .res-sec{padding:0 14px 52px;}
-  .dgrid{grid-template-columns:1fr 1fr;}
-  .deal-card.feat{grid-column:span 2;}
+  .dgrid{grid-template-columns:repeat(3,1fr);}
+  .deal-card.feat{grid-column:span 1;}
   .np{width:300px;}
   .ft{grid-template-columns:1fr 1fr;gap:22px;}
 }
@@ -616,7 +699,7 @@ footer{background:var(--black);padding:44px 40px 28px;}
   .logo-nm{display:none;}
   .btn-ghost{display:none;}
   .sb-input{min-width:80px;}
-  .dgrid{grid-template-columns:1fr;}
+  .dgrid{grid-template-columns:repeat(2,1fr);}
   .deal-card.feat{grid-column:span 1;}
   .np{width:280px;right:-10px;}
   .steps{grid-template-columns:1fr;}
@@ -1100,35 +1183,71 @@ const SICO={Conad:'🏪',"IN's Mercato":'🛒',Lidl:'🔵',Carrefour:'🛍️',E
 const SDIST={Conad:'230m',"IN's Mercato":'410m',Lidl:'620m',Carrefour:'850m',Eurospin:'1.1km'};
 const SBG={Conad:'#FFF0F2',"IN's Mercato":'#FFF3E6',Lidl:'#EEF4FF',Carrefour:'#EEF2FF',Eurospin:'#FFFBE6'};
 const STORE_DEALS={
-  Eurospin:[
-    {emoji:'🍝',name:'Pasta Barilla 500g',unit:'500g',newPrice:.59,oldPrice:.99,discount:40,feat:true},
-    {emoji:'🥛',name:'Latte Fresco 1L',unit:'1 litre',newPrice:.69,oldPrice:.99,discount:30},
-    {emoji:'🍞',name:'Pane di Casa 400g',unit:'400g',newPrice:.79,oldPrice:1.20,discount:34},
-    {emoji:'🌾',name:'Farina 00 1kg',unit:'1kg',newPrice:.49,oldPrice:.75,discount:35},
-  ],
-  Lidl:[
-    {emoji:'🧀',name:'Parmigiano DOP 200g',unit:'200g',newPrice:2.49,oldPrice:3.99,discount:38,feat:true},
-    {emoji:'🍗',name:'Petti di Pollo 500g',unit:'500g',newPrice:3.49,oldPrice:5.20,discount:33},
-    {emoji:'🥚',name:'Uova Fresche 6pz',unit:'6 eggs',newPrice:1.29,oldPrice:1.99,discount:35},
-    {emoji:'🫒',name:'Olio EVO 750ml',unit:'750ml',newPrice:3.49,oldPrice:5.50,discount:37},
-  ],
-  Conad:[
-    {emoji:'🍎',name:'Mele Golden 1kg',unit:'per kg',newPrice:1.19,oldPrice:1.80,discount:34,feat:true},
-    {emoji:'🍌',name:'Banane 1kg',unit:'per kg',newPrice:.79,oldPrice:1.30,discount:39},
-    {emoji:'🧈',name:'Burro Lurpak 250g',unit:'250g',newPrice:1.89,oldPrice:2.80,discount:33},
-    {emoji:'💧',name:'Acqua Naturale 1.5L×6',unit:'1.5L×6',newPrice:1.29,oldPrice:2.10,discount:39},
-  ],
-  "IN's Mercato":[
-    {emoji:'🍊',name:'Arance Siciliane 1kg',unit:'per kg',newPrice:.79,oldPrice:1.40,discount:44,feat:true},
-    {emoji:'🫙',name:'Yogurt Greco 4×125g',unit:'4×125g',newPrice:1.49,oldPrice:2.30,discount:35},
-    {emoji:'🍚',name:'Riso Superfino 1kg',unit:'1kg',newPrice:.89,oldPrice:1.50,discount:41},
-    {emoji:'🐟',name:"Tonno Sott'Olio 3×80g",unit:'3×80g',newPrice:1.19,oldPrice:1.80,discount:34},
-  ],
-  Carrefour:[
-    {emoji:'🥛',name:'Oat Milk Oatly 1L',unit:'1L',newPrice:1.49,oldPrice:3.20,discount:53,feat:true},
-    {emoji:'🍝',name:'Spaghetti Rummo 500g',unit:'500g',newPrice:.79,oldPrice:1.30,discount:39},
-    {emoji:'🍗',name:'Cosce di Pollo 1kg',unit:'1kg',newPrice:3.99,oldPrice:7.00,discount:43},
-  ]
+  Eurospin:{
+    promo:{title:'🟡 Eurospin Value Week',subtitle:'Biggest discounts of the month',badge:'Up to 50% off'},
+    deals:[
+      {emoji:'🍝',name:'Pasta Barilla 500g',unit:'500g',newPrice:.59,oldPrice:.99,discount:40,feat:true,label:'hot'},
+      {emoji:'🥛',name:'Latte Fresco Intero 1L',unit:'1 litre',newPrice:.69,oldPrice:.99,discount:30,label:'hot'},
+      {emoji:'🍞',name:'Pane di Casa 400g',unit:'400g',newPrice:.79,oldPrice:1.20,discount:34},
+      {emoji:'🌾',name:'Farina 00 1kg',unit:'1kg',newPrice:.49,oldPrice:.75,discount:35},
+      {emoji:'🍫',name:'Cioccolato al Latte 200g',unit:'200g',newPrice:.89,oldPrice:1.49,discount:40,label:'new'},
+      {emoji:'☕',name:'Caffè Macinato 250g',unit:'250g',newPrice:1.29,oldPrice:2.19,discount:41,label:'hot'},
+      {emoji:'🧴',name:'Detersivo Piatti 1L',unit:'1L',newPrice:.99,oldPrice:1.89,discount:48,label:'promo'},
+      {emoji:'🥫',name:'Pelati San Marzano 400g',unit:'400g',newPrice:.55,oldPrice:.89,discount:38},
+    ]
+  },
+  Lidl:{
+    promo:{title:'🔵 Lidl Frischekracher',subtitle:'Fresh weekly deals on premium products',badge:'New this week'},
+    deals:[
+      {emoji:'🧀',name:'Parmigiano Reggiano DOP 200g',unit:'200g',newPrice:2.49,oldPrice:3.99,discount:38,feat:true,label:'hot'},
+      {emoji:'🍗',name:'Petti di Pollo Fresco 500g',unit:'500g',newPrice:3.49,oldPrice:5.20,discount:33,label:'hot'},
+      {emoji:'🥚',name:'Uova Fresche Classe A 6pz',unit:'6 eggs',newPrice:1.29,oldPrice:1.99,discount:35},
+      {emoji:'🫒',name:'Olio EVO Siciliano 750ml',unit:'750ml',newPrice:3.49,oldPrice:5.50,discount:37,label:'promo'},
+      {emoji:'🥦',name:'Broccolo Bio 500g',unit:'500g',newPrice:.89,oldPrice:1.49,discount:40,label:'new'},
+      {emoji:'🍷',name:'Vino Rosso Doc 750ml',unit:'750ml',newPrice:2.99,oldPrice:4.99,discount:40,label:'hot'},
+      {emoji:'🧂',name:'Sale Integrale Marino 1kg',unit:'1kg',newPrice:.39,oldPrice:.69,discount:43},
+      {emoji:'🫙',name:'Nutella 400g',unit:'400g',newPrice:2.49,oldPrice:3.49,discount:29,label:'promo'},
+    ]
+  },
+  Conad:{
+    promo:{title:'🟢 Conad Più Conveniente',subtitle:'Loyalty card exclusive prices today',badge:'Card holders only'},
+    deals:[
+      {emoji:'🍎',name:'Mele Golden Bio 1kg',unit:'per kg',newPrice:1.19,oldPrice:1.80,discount:34,feat:true,label:'new'},
+      {emoji:'🍌',name:'Banane Ecuador 1kg',unit:'per kg',newPrice:.79,oldPrice:1.30,discount:39,label:'hot'},
+      {emoji:'🧈',name:'Burro Lurpak 250g',unit:'250g',newPrice:1.89,oldPrice:2.80,discount:33},
+      {emoji:'💧',name:'Acqua Naturale 1.5L×6',unit:'1.5L×6',newPrice:1.29,oldPrice:2.10,discount:39,label:'promo'},
+      {emoji:'🍓',name:'Fragole Italiane 500g',unit:'500g',newPrice:1.99,oldPrice:2.99,discount:33,label:'new'},
+      {emoji:'🥩',name:'Bistecca di Manzo 300g',unit:'300g',newPrice:4.49,oldPrice:6.99,discount:36,label:'hot'},
+      {emoji:'🥤',name:'Succo Arancia 1L×3',unit:'3×1L',newPrice:2.49,oldPrice:3.99,discount:38},
+      {emoji:'🧻',name:'Carta Igienica 10 Rotoli',unit:'10 rolls',newPrice:2.99,oldPrice:4.49,discount:33,label:'promo'},
+    ]
+  },
+  "IN's Mercato":{
+    promo:{title:'🟠 IN\'s Flash Deals',subtitle:'Limited time — ends midnight tonight',badge:'⚡ Flash sale'},
+    deals:[
+      {emoji:'🍊',name:'Arance Siciliane 1kg',unit:'per kg',newPrice:.79,oldPrice:1.40,discount:44,feat:true,label:'hot'},
+      {emoji:'🫙',name:'Yogurt Greco 0% 4×125g',unit:'4×125g',newPrice:1.49,oldPrice:2.30,discount:35,label:'promo'},
+      {emoji:'🍚',name:'Riso Arborio Superfino 1kg',unit:'1kg',newPrice:.89,oldPrice:1.50,discount:41},
+      {emoji:'🐟',name:"Tonno Sott'Olio Rio Mare 3×80g",unit:'3×80g',newPrice:1.19,oldPrice:1.80,discount:34},
+      {emoji:'🥕',name:'Carote Bio 1kg',unit:'1kg',newPrice:.69,oldPrice:1.10,discount:37,label:'new'},
+      {emoji:'🫐',name:'Mirtilli Freschi 125g',unit:'125g',newPrice:1.29,oldPrice:2.19,discount:41,label:'hot'},
+      {emoji:'🥗',name:'Insalata Mista 300g',unit:'300g',newPrice:.99,oldPrice:1.59,discount:38},
+      {emoji:'🧆',name:'Hummus Biologico 200g',unit:'200g',newPrice:1.49,oldPrice:2.49,discount:40,label:'new'},
+    ]
+  },
+  Carrefour:{
+    promo:{title:'🔴 Carrefour Promo della Settimana',subtitle:'Member prices + double loyalty points',badge:'2× Points'},
+    deals:[
+      {emoji:'🥛',name:'Oat Milk Oatly 1L',unit:'1L',newPrice:1.49,oldPrice:3.20,discount:53,feat:true,label:'hot'},
+      {emoji:'🍝',name:'Spaghetti Rummo 500g',unit:'500g',newPrice:.79,oldPrice:1.30,discount:39,label:'promo'},
+      {emoji:'🍗',name:'Cosce di Pollo Bio 1kg',unit:'1kg',newPrice:3.99,oldPrice:7.00,discount:43,label:'hot'},
+      {emoji:'🧃',name:'Smoothie Mango&Ananas 250ml',unit:'250ml',newPrice:.89,oldPrice:1.59,discount:44,label:'new'},
+      {emoji:'🍕',name:'Pizza Margherita Fresca',unit:'300g',newPrice:2.29,oldPrice:3.49,discount:34},
+      {emoji:'🥐',name:'Croissant al Burro 6pz',unit:'6 pieces',newPrice:1.99,oldPrice:2.99,discount:33,label:'new'},
+      {emoji:'🫚',name:'Olio di Semi Girasole 1L',unit:'1L',newPrice:.99,oldPrice:1.69,discount:41},
+      {emoji:'🧁',name:'Muffin ai Mirtilli 4pz',unit:'4 pieces',newPrice:1.79,oldPrice:2.79,discount:36,label:'promo'},
+    ]
+  }
 };
 const ALERT_POOL=[
   {emoji:'🍝',name:'Pasta Barilla 500g',store:'Eurospin',dist:'1.1km',newPrice:.59,oldPrice:.99,discount:40},
@@ -1515,11 +1634,39 @@ function mapsUrl(store){
   const city=document.getElementById('loc-text').textContent.replace('📍','').trim().split(',')[0]||'Roma';
   return`https://www.google.com/maps/search/${encodeURIComponent(store+' supermercato '+city)}`;
 }
+const CAT_RELATED={
+  Dairy:['Milk','Eggs','Cheese','Yogurt','Butter','Oat Milk'],
+  Pantry:['Pasta','Olive Oil','Rice','Flour','Tuna'],
+  Produce:['Apples','Oranges','Tomatoes','Bananas'],
+  Bakery:['Bread'],Meat:['Chicken'],Beverages:['Water'],
+  'Dairy Alt':['Oat Milk','Yogurt'],Other:PRODUCTS.map(p=>p.name)
+};
 function findProd(raw){
   const c=raw.replace(/^[^\w]+/,'').trim().toLowerCase();
-  return PRODUCTS.find(p=>p.name.toLowerCase().includes(c)||c.includes(p.name.toLowerCase()))
-    ||{name:raw.replace(/^[^\w\s]+/,'').trim(),emoji:'🛒',cat:'Other',
-       prices:{Conad:+(Math.random()*3+1).toFixed(2),"IN's Mercato":+(Math.random()*3+.8).toFixed(2),Lidl:+(Math.random()*3+.7).toFixed(2),Carrefour:+(Math.random()*3+1.1).toFixed(2),Eurospin:+(Math.random()*3+.6).toFixed(2)}};
+  return PRODUCTS.find(p=>p.name.toLowerCase().includes(c)||c.includes(p.name.toLowerCase()))||null;
+}
+function getRelated(raw){
+  const c=raw.replace(/^[^\w]+/,'').trim().toLowerCase();
+  // First try category keywords
+  const catHints={
+    dairy:['Milk','Eggs','Cheese','Yogurt','Butter','Oat Milk'],
+    milk:['Milk','Oat Milk','Yogurt'],
+    cheese:['Cheese','Butter','Eggs'],
+    meat:['Chicken'],chicken:['Chicken'],
+    fruit:['Apples','Oranges','Bananas','Tomatoes'],
+    vegetable:['Tomatoes','Apples'],
+    grain:['Pasta','Rice','Bread','Flour'],
+    bread:['Bread','Flour'],pasta:['Pasta','Rice'],
+    oil:['Olive Oil'],olive:['Olive Oil'],
+    drink:['Water','Oat Milk'],water:['Water'],
+    egg:['Eggs','Butter','Cheese'],
+    sweet:['Yogurt','Butter'],
+  };
+  for(const[kw,names]of Object.entries(catHints)){
+    if(c.includes(kw)){return PRODUCTS.filter(p=>names.includes(p.name)).slice(0,6);}
+  }
+  // Fallback: return popular items
+  return PRODUCTS.slice(0,6);
 }
 
 function runSearch(){
@@ -1529,7 +1676,21 @@ function runSearch(){
     b.style.borderColor='var(--red)';b.style.boxShadow='0 0 0 3px rgba(239,68,68,.1)';
     setTimeout(()=>{b.style.borderColor='';b.style.boxShadow='';},1500);sbIn.focus();return;
   }
-  const items=tags.map(findProd);
+
+  // Separate found vs not-found
+  const found=[], notFound=[];
+  tags.forEach(tag=>{
+    const p=findProd(tag);
+    if(p) found.push(p);
+    else notFound.push(tag);
+  });
+
+  // If nothing found at all, show "not found" UI
+  if(!found.length){
+    showNotFound(notFound);return;
+  }
+
+  const items=found;
   const totals={};STORES.forEach(s=>{totals[s]=0;});
   items.forEach(it=>{STORES.forEach(s=>{totals[s]+=(it.prices[s]||0);});});
   const sorted=[...STORES].sort((a,b)=>totals[a]-totals[b]);
@@ -1538,11 +1699,16 @@ function runSearch(){
   const rs=document.getElementById('res-sec');rs.classList.add('vis');
   setTimeout(()=>rs.scrollIntoView({behavior:'smooth',block:'start'}),50);
   document.getElementById('res-meta').innerHTML=`Comparing <strong>${items.length} product${items.length>1?'s':''}</strong> across <strong>${STORES.length} stores</strong>`;
-  document.getElementById('s-items').innerHTML=items.map(it=>`<div class="s-chip"><span>${it.emoji}</span>${it.name}</div>`).join('');
+
+  // Show chips — green for found, orange for not-found
+  document.getElementById('s-items').innerHTML=
+    items.map(it=>`<div class="s-chip"><span>${it.emoji}</span>${it.name}</div>`).join('')+
+    notFound.map(t=>`<div class="s-chip" style="background:var(--orange-pale);border-color:rgba(255,107,0,.3);color:var(--orange)"><span>⚠️</span>${t.replace(/^[^\w]+/,'').trim()} <span style="font-size:10px;opacity:.7">not found</span></div>`).join('');
+
   document.getElementById('sum-cards').innerHTML=`
     <div class="sum-card w"><div class="sc-ico">🏆</div><div class="sc-lbl">Best store</div><div class="sc-val">${SICO[best]||'🏪'} ${best}</div><div class="sc-sub">${SDIST[best]||'nearby'} away</div></div>
     <div class="sum-card s"><div class="sc-ico">💰</div><div class="sc-lbl">You save</div><div class="sc-val">€${maxSave.toFixed(2)}</div><div class="sc-sub">vs. ${worst}</div></div>
-    <div class="sum-card i"><div class="sc-ico">🛒</div><div class="sc-lbl">Items compared</div><div class="sc-val">${items.length}</div><div class="sc-sub">${STORES.length} stores checked</div></div>`;
+    <div class="sum-card i"><div class="sc-ico">🛒</div><div class="sc-lbl">Items found</div><div class="sc-val">${items.length}<span style="font-size:13px;font-weight:500;color:var(--g3)">/${tags.length}</span></div><div class="sc-sub">${STORES.length} stores checked</div></div>`;
 
   document.getElementById('tbl-head').innerHTML=`<tr><th>#</th><th class="sh">Store</th>${items.map(it=>`<th>${it.emoji} ${it.name}</th>`).join('')}<th>Total</th><th>Action</th></tr>`;
   document.getElementById('tbl-body').innerHTML=sorted.map((store,rank)=>{
@@ -1556,9 +1722,7 @@ function runSearch(){
       ${items.map(it=>{const p=it.prices[store]||0,mn=Math.min(...STORES.map(s=>it.prices[s]||0)),mx=Math.max(...STORES.map(s=>it.prices[s]||0));
         return`<td><span class="pc ${p===mn?'best':p===mx?'worst':''}">€${p.toFixed(2)}</span></td>`;}).join('')}
       <td><span class="tc ${win?'win':''}">€${total.toFixed(2)}</span>${saving>0?`<br><span class="save-badge">💰 €${saving.toFixed(2)}</span>`:''}</td>
-      <td>
-        <button class="atc-btn" onclick='addAllToCart(${JSON.stringify(itemsJson)},${JSON.stringify(store)},this)'>🛒 Add all</button>
-      </td></tr>`;
+      <td><button class="atc-btn" onclick='addAllToCart(${JSON.stringify(itemsJson)},${JSON.stringify(store)},this)'>🛒 Add all</button></td></tr>`;
   }).join('');
 
   document.getElementById('bdn-grid').innerHTML=items.map(it=>{
@@ -1567,6 +1731,56 @@ function runSearch(){
     return`<div class="bdn-card"><div class="bdn-top"><div class="bdn-em">${it.emoji}</div><div><div class="bdn-nm">${it.name}</div><div class="bdn-ct">${it.cat}</div></div></div>
     ${ps.map(({store,price})=>`<div class="bdn-row"><span class="bdn-st">${store}</span><span class="bdn-pr ${price===ps[0].price?'best':''}">€${price.toFixed(2)}</span></div><div class="bdn-bw"><div class="bdn-bar" style="width:${(price/mx*100).toFixed(0)}%"></div></div>`).join('')}</div>`;
   }).join('');
+
+  // Show related suggestions for not-found items
+  renderNotFoundSuggestions(notFound);
+}
+
+function showNotFound(notFound){
+  const rs=document.getElementById('res-sec');rs.classList.add('vis');
+  setTimeout(()=>rs.scrollIntoView({behavior:'smooth',block:'start'}),50);
+  document.getElementById('res-meta').innerHTML=`<span style="color:var(--red)">No exact matches found</span> — showing related products`;
+  document.getElementById('s-items').innerHTML=notFound.map(t=>`<div class="s-chip" style="background:var(--orange-pale);border-color:rgba(255,107,0,.3);color:var(--orange)"><span>❌</span>${t.replace(/^[^\w]+/,'').trim()}</div>`).join('');
+  document.getElementById('sum-cards').innerHTML=`<div class="sum-card i" style="grid-column:1/-1"><div class="sc-ico">🔍</div><div class="sc-lbl">Showing similar products</div><div class="sc-val" style="font-size:16px">We couldn't find exactly what you searched for, but here are some similar items you might like</div></div>`;
+  document.getElementById('tbl-head').innerHTML='';
+  document.getElementById('tbl-body').innerHTML='';
+  document.getElementById('bdn-grid').innerHTML='';
+  renderNotFoundSuggestions(notFound);
+}
+
+function renderNotFoundSuggestions(notFound){
+  // Remove any existing related section
+  document.querySelectorAll('.related-sec').forEach(el=>el.remove());
+  if(!notFound.length) return;
+
+  const container=document.getElementById('res-sec');
+  notFound.forEach(tag=>{
+    const clean=tag.replace(/^[^\w]+/,'').trim();
+    const related=getRelated(tag);
+    if(!related.length) return;
+    const sec=document.createElement('div');
+    sec.className='related-sec';
+    sec.innerHTML=`
+      <div class="not-found-note">🔍 We couldn't find <strong>"${clean}"</strong> — here are some similar products you might like:</div>
+      <div class="related-lbl">Related products</div>
+      <div class="related-strip">
+        ${related.map(p=>{
+          const bestPrice=Math.min(...STORES.map(s=>p.prices[s]||99));
+          const bestStore=STORES.find(s=>p.prices[s]===bestPrice)||STORES[0];
+          return`<div class="rel-card" onclick="addToCart('${p.emoji}','${p.name}','${p.cat}',${bestPrice},'${bestStore}');this.style.borderColor='var(--green)'">
+            <div class="rel-card-img">
+              <span style="filter:drop-shadow(0 3px 10px rgba(0,0,0,.12))">${p.emoji}</span>
+              <button class="rel-card-plus">+</button>
+            </div>
+            <div class="rel-card-inf">
+              <div class="rel-card-nm">${p.name}</div>
+              <div class="rel-card-pr">from €${bestPrice.toFixed(2)}</div>
+            </div>
+          </div>`;
+        }).join('')}
+      </div>`;
+    container.appendChild(sec);
+  });
 }
 
 function addAllToCart(itemsJson,store,btn){
@@ -1576,7 +1790,7 @@ function addAllToCart(itemsJson,store,btn){
   setTimeout(()=>openCart(),300);
 }
 
-function clearResults(){tags=[];renderTags();updBadge();document.getElementById('res-sec').classList.remove('vis');window.scrollTo({top:0,behavior:'smooth'});}
+function clearResults(){tags=[];renderTags();updBadge();document.getElementById('res-sec').classList.remove('vis');document.querySelectorAll('.related-sec').forEach(el=>el.remove());window.scrollTo({top:0,behavior:'smooth'});}
 
 /* ═══════════════════════════════════
    DEALS
@@ -1586,8 +1800,10 @@ function renderDeals(filter='all'){
   const list=filter==='all'?STORES:STORES.filter(s=>s===filter);
   grid.innerHTML='';
   list.forEach(store=>{
-    const deals=STORE_DEALS[store]||[];
-    const avg=Math.round(deals.reduce((a,d)=>a+d.discount,0)/deals.length);
+    const storeData=STORE_DEALS[store]||{deals:[]};
+    const deals=storeData.deals||[];
+    const promo=storeData.promo;
+    const avg=deals.length?Math.round(deals.reduce((a,d)=>a+d.discount,0)/deals.length):0;
     const k=store.replace(/[\s']/g,'_');
     const el=document.createElement('div');el.className='sdc';
     el.innerHTML=`<div class="sdc-hd" onclick="toggleSdc('${k}')">
@@ -1602,29 +1818,52 @@ function renderDeals(filter='all'){
       </div>
     </div>
     <div class="sdc-body" id="body_${k}">
-      <div class="dgrid">${deals.map(d=>`
-        <div class="deal-card${d.feat?' feat':''}" onclick="addToCart('${d.emoji}','${d.name.replace(/'/g,"\\'")}','Grocery',${d.newPrice},'${store}');animateCartAdd(this)">
-          <div class="dc-em">${d.emoji}</div>
-          <div class="dc-inf">
-            <div class="dc-nm">${d.name}</div>
-            <div class="dc-un">${d.unit}</div>
-            <div class="dc-atc">＋ Tap to add to cart</div>
-          </div>
-          <div class="dc-pr">
-            <div class="dc-new">€${d.newPrice.toFixed(2)}</div>
-            <div class="dc-old">€${d.oldPrice.toFixed(2)}</div>
-            <div class="dc-disc">-${d.discount}%</div>
-          </div>
-        </div>`).join('')}
+      ${promo?`<div class="store-promo-banner">
+        <div><div class="spb-txt">${promo.title}</div><div class="spb-sub">${promo.subtitle}</div></div>
+        <div class="spb-badge">${promo.badge}</div>
+      </div>`:''}
+      <div class="dgrid">
+        ${deals.map((d,idx)=>{
+          const labelMap={hot:'🔥 HOT',new:'✨ NEW',promo:'PROMO'};
+          const labelClass={hot:'hot',new:'new',promo:'promo'};
+          return`<div class="deal-card${d.feat?' feat':''}${d.label==='promo'?' promo':''}" onclick="dcAddToCart(event,'${d.emoji}','${d.name.replace(/'/g,"\\'")}',${d.newPrice},'${store}',this)">
+            <div class="dc-img">
+              <span style="filter:drop-shadow(0 4px 12px rgba(0,0,0,.15))">${d.emoji}</span>
+              <div class="dc-badge${d.label==='promo'?' promo-tag':d.feat?' hot-tag':''}">-${d.discount}%</div>
+              ${d.label?`<div class="dc-label ${labelClass[d.label]||'hot'}">${labelMap[d.label]||d.label}</div>`:''}
+            </div>
+            <div class="dc-inf">
+              <div class="dc-nm">${d.name}</div>
+              <div class="dc-un">${d.unit}</div>
+              <div class="dc-prices">
+                <span class="dc-new">€${d.newPrice.toFixed(2)}</span>
+                <span class="dc-old">€${d.oldPrice.toFixed(2)}</span>
+              </div>
+            </div>
+            <button class="dc-plus" id="dcplus_${k}_${idx}" onclick="event.stopPropagation();dcAddToCart(event,'${d.emoji}','${d.name.replace(/'/g,"\\'")}',${d.newPrice},'${store}',this.closest('.deal-card'),this)">+</button>
+          </div>`;
+        }).join('')}
       </div>
     </div>`;
     grid.appendChild(el);
   });
   if(list.length)openSdc(list[0].replace(/[\s']/g,'_'));
 }
-function animateCartAdd(el){
-  el.style.transform='scale(.97)';el.style.background='rgba(34,197,94,.12)';el.style.borderColor='rgba(34,197,94,.3)';
-  setTimeout(()=>{el.style.transform='';el.style.background='';el.style.borderColor='';},400);
+
+function dcAddToCart(event,emoji,name,price,store,cardEl,plusBtn){
+  addToCart(emoji,name,'Grocery',price,store);
+  // Animate card
+  if(cardEl){
+    cardEl.style.transition='transform .15s,box-shadow .15s';
+    cardEl.style.transform='scale(.97)';
+    setTimeout(()=>{cardEl.style.transform='';},200);
+  }
+  // Animate plus button
+  const btn=plusBtn||cardEl?.querySelector('.dc-plus');
+  if(btn){
+    btn.classList.add('added');btn.textContent='✓';
+    setTimeout(()=>{btn.classList.remove('added');btn.textContent='+';},1400);
+  }
 }
 function toggleSdc(k){const b=document.getElementById('body_'+k),c=document.getElementById('chev_'+k);b.classList.toggle('open');if(c)c.classList.toggle('open',b.classList.contains('open'));}
 function openSdc(k){const b=document.getElementById('body_'+k),c=document.getElementById('chev_'+k);if(b)b.classList.add('open');if(c)c.classList.add('open');}
